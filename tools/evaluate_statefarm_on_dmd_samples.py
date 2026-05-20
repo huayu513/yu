@@ -10,7 +10,9 @@ def parse_args():
     parser = argparse.ArgumentParser(
         description="Run a State Farm classifier on sampled DMD images and export per-image and per-class summaries."
     )
-    parser.add_argument("--model", required=True, help="Path to classifier weights, e.g. runs/classify/train4/weights/best.pt.")
+    parser.add_argument(
+        "--model", required=True, help="Path to classifier weights, e.g. runs/classify/train4/weights/best.pt."
+    )
     parser.add_argument(
         "--samples-dir",
         required=True,
@@ -137,10 +139,14 @@ def main():
             row_fields.append(field)
 
     extra_row_fields = sorted({key for row in rows for key in row.keys()} - set(row_fields))
-    detail_fields = row_fields + extra_row_fields + [
-        "pred_class",
-        "pred_conf",
-    ]
+    detail_fields = (
+        row_fields
+        + extra_row_fields
+        + [
+            "pred_class",
+            "pred_conf",
+        ]
+    )
     for rank in range(args.topk):
         detail_fields.extend([f"top{rank + 1}_class", f"top{rank + 1}_conf"])
 
