@@ -1,0 +1,22 @@
+model: ultralytics/cfg/models/11/yolo11s-cls.yaml
+data: dataset_cls_subject
+epochs: 100
+imgsz: 320
+batch: 80
+workers: 4
+seed: 42
+device: 0
+pretrained: yolo11s-cls.pt
+
+fliplr: 0.0
+flipud: 0.0
+auto_augment: randaugment
+erasing: 0.4
+hsv_h: 0.02
+hsv_s: 0.8
+hsv_v: 0.5
+scale: 0.6
+patience: 30
+
+
+# yolo classify train cfg=train_img.yaml

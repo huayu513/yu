@@ -1,0 +1,28 @@
+model: ultralytics/cfg/models/11/yolo11-cls.yaml
+data: dataset_fatigue_face_s5_v1
+epochs: 20
+imgsz: 224
+batch: 64
+workers: 4
+seed: 42
+device: 0
+pretrained: yolo11n-cls.pt
+
+optimizer: AdamW
+lr0: 0.0003
+lrf: 1.0
+warmup_epochs: 0.0
+weight_decay: 0.0005
+patience: 5
+
+fliplr: 0.0
+flipud: 0.0
+auto_augment: null
+erasing: 0.0
+hsv_h: 0.0
+hsv_s: 0.2
+hsv_v: 0.2
+scale: 0.2
+
+
+# yolo classify train cfg=train_face_1.yaml

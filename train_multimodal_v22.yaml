@@ -1,0 +1,66 @@
+data_root: dataset_multimodal_driver_v4
+body_weight: runs/classify/train34/weights/best.pt
+face_weight: runs/classify/train42/weights/best.pt
+
+project: runs/multimodal
+name: train_multimodal_v22
+exist_ok: false
+
+seed: 42
+device: 0
+imgsz: 224
+batch: 48
+workers: 2
+pin_memory: true
+
+proj_dim: 256
+fusion_dim: 256
+task_interaction_dim: 0
+task_attention_heads: 4
+task_fusion_dim: 0
+task_head_dim: 0
+gate_hidden_dim: 0
+aux_head_dim: 0
+fatigue_face_dominant: false
+fatigue_residual_dim: 0
+distraction_residual_dim: 0
+fatigue_prior_fusion: false
+temporal_face_dim: 0
+dropout: 0.2
+weight_decay: 0.0005
+
+distraction_loss_weight: 1.0
+fatigue_loss_weight: 1.2
+aux_distraction_loss_weight: 0.0
+aux_fatigue_loss_weight: 0.0
+
+fliplr: 0.0
+flipud: 0.0
+auto_augment: null
+erasing: 0.0
+hsv_h: 0.0
+hsv_s: 0.2
+hsv_v: 0.2
+scale: 0.2
+
+stages:
+  - name: warmup_heads
+    epochs: 4
+    lr: 0.001
+    patience: 2
+    train_body_encoder: false
+    train_face_encoder: false
+
+  - name: face_adapt
+    epochs: 4
+    lr: 0.0002
+    patience: 2
+    train_body_encoder: false
+    train_face_encoder: true
+
+  - name: joint_finetune
+    epochs: 5
+    lr: 0.00005
+    patience: 2
+    train_body_encoder: true
+    train_face_encoder: true

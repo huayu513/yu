@@ -45,6 +45,7 @@ mask_ratio: 4 # (int) mask downsample ratio (segment only)
 
 # Classification
 dropout: 0.0 # (float) dropout for classification head (classify only)
+class_weights: # (list[float], optional) class weights for classification loss (classify only)
 
 # Val/Test settings ----------------------------------------------------------------------------------------------------
 val: True # (bool) run validation/testing during training

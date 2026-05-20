@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+﻿# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -183,7 +183,6 @@ pnnx*
 calibration_*.npy
 
 # Videos and Pictures
-*.mp4
 *.avi
 *.mov
 *.mkv
@@ -203,3 +202,11 @@ calibration_*.npy
 # Training logs
 args.yaml
 results.csv
+
+# Local datasets and generated project artifacts
+dataset_*/
+dmd-dataset-mini-sample-*/
+.yolo_config/
+*.zip
+*.aux
+*.synctex.gz

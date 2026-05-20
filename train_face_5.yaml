@@ -1,0 +1,27 @@
+model: runs/classify/train28/weights/best.pt
+data: dataset_fatigue_face_mix_ft_v3
+epochs: 8
+imgsz: 224
+batch: 32
+workers: 2
+seed: 42
+device: 0
+
+optimizer: AdamW
+lr0: 0.0001
+lrf: 1.0
+warmup_epochs: 0.0
+weight_decay: 0.0005
+patience: 3
+
+fliplr: 0.0
+flipud: 0.0
+auto_augment: null
+erasing: 0.0
+hsv_h: 0.0
+hsv_s: 0.2
+hsv_v: 0.2
+scale: 0.2
+
+
+# yolo classify train cfg=train_face_5.yaml

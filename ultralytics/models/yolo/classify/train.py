@@ -83,6 +83,18 @@ class ClassificationTrainer(BaseTrainer):
         if weights:
             model.load(weights)
 
+        class_weights = getattr(self.args, "class_weights", None)
+        if class_weights is not None:
+            if isinstance(class_weights, str):
+                class_weights = [float(x.strip()) for x in class_weights.split(",") if x.strip()]
+            if len(class_weights) != self.data["nc"]:
+                raise ValueError(
+                    f"class_weights length {len(class_weights)} must match number of classes {self.data['nc']}."
+                )
+            model.class_weights = torch.tensor(class_weights, dtype=torch.float32)
+        else:
+            model.class_weights = None
+
         for m in model.modules():
             if not self.args.pretrained and hasattr(m, "reset_parameters"):
                 m.reset_parameters()

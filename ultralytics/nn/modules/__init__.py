@@ -73,7 +73,9 @@ from .conv import (
     GhostConv,
     Index,
     LightConv,
+    ECAAttention,
     RepConv,
+    SEAttention,
     SpatialAttention,
 )
 from .head import (
@@ -149,6 +151,7 @@ __all__ = (
     "ConvTranspose",
     "DWConv",
     "DWConvTranspose2d",
+    "ECAAttention",
     "DeformableTransformerDecoder",
     "DeformableTransformerDecoderLayer",
     "Detect",
@@ -175,6 +178,7 @@ __all__ = (
     "RepVGGDW",
     "ResNetLayer",
     "SCDown",
+    "SEAttention",
     "Segment",
     "Segment26",
     "SpatialAttention",

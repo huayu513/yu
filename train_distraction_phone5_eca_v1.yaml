@@ -1,0 +1,25 @@
+model: ultralytics/cfg/models/11/yolo11-cls-eca.yaml
+data: dataset_mix_ft_phone5_v2
+epochs: 12
+imgsz: 320
+batch: 32
+workers: 2
+seed: 42
+device: 0
+pretrained: yolo11n-cls.pt
+
+optimizer: AdamW
+lr0: 0.0003
+lrf: 1.0
+warmup_epochs: 0.0
+weight_decay: 0.0005
+patience: 3
+
+fliplr: 0.0
+flipud: 0.0
+auto_augment: null
+erasing: 0.0
+hsv_h: 0.01
+hsv_s: 0.3
+hsv_v: 0.3
+scale: 0.3

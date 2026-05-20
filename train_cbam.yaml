@@ -1,0 +1,11 @@
+model: ultralytics/cfg/models/11/yolo11-cls-cbam.yaml
+data: dataset_cls_subject
+epochs: 400
+imgsz: 224
+batch: 16
+workers: 4
+seed: 42
+device: 0
+pretrained: yolo11n-cls.pt
+
+# yolo classify train cfg=train_cbam.yaml

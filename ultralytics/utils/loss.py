@@ -953,10 +953,20 @@ class PoseLoss26(v8PoseLoss):
 class v8ClassificationLoss:
     """Criterion class for computing training losses for classification."""
 
+    def __init__(self, model=None):
+        """Initialize classification loss with optional class weights from model."""
+        self.weight = None
+        if model is not None and hasattr(model, "class_weights") and model.class_weights is not None:
+            self.weight = model.class_weights
+
     def __call__(self, preds: Any, batch: dict[str, torch.Tensor]) -> tuple[torch.Tensor, torch.Tensor]:
         """Compute the classification loss between predictions and true labels."""
         preds = preds[1] if isinstance(preds, (list, tuple)) else preds
-        loss = F.cross_entropy(preds, batch["cls"], reduction="mean")
+        weight = self.weight
+        if weight is not None:
+            if weight.device != preds.device or weight.dtype != preds.dtype:
+                weight = weight.to(device=preds.device, dtype=preds.dtype)
+        loss = F.cross_entropy(preds, batch["cls"], weight=weight, reduction="mean")
         return loss, loss.detach()
 
 

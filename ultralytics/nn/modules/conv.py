@@ -22,7 +22,9 @@ __all__ = (
     "GhostConv",
     "Index",
     "LightConv",
+    "ECAAttention",
     "RepConv",
+    "SEAttention",
     "SpatialAttention",
 )
 
@@ -611,6 +613,57 @@ class CBAM(nn.Module):
             (torch.Tensor): Attended output tensor.
         """
         return self.spatial_attention(self.channel_attention(x))
+
+
+class SEAttention(nn.Module):
+    """Squeeze-and-Excitation attention module.
+
+    Recalibrates channel-wise feature responses using global context.
+    """
+
+    def __init__(self, c1, reduction=16):
+        """Initialize SE attention.
+
+        Args:
+            c1 (int): Number of input channels.
+            reduction (int): Channel reduction ratio.
+        """
+        super().__init__()
+        c_mid = max(c1 // reduction, 1)
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.fc1 = nn.Conv2d(c1, c_mid, 1, bias=True)
+        self.act = nn.SiLU()
+        self.fc2 = nn.Conv2d(c_mid, c1, 1, bias=True)
+        self.gate = nn.Sigmoid()
+
+    def forward(self, x):
+        """Apply SE channel recalibration."""
+        w = self.pool(x)
+        w = self.fc2(self.act(self.fc1(w)))
+        return x * self.gate(w)
+
+
+class ECAAttention(nn.Module):
+    """Efficient Channel Attention module."""
+
+    def __init__(self, c1, k_size=3):
+        """Initialize ECA attention.
+
+        Args:
+            c1 (int): Number of input channels.
+            k_size (int): 1D convolution kernel size.
+        """
+        super().__init__()
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.conv = nn.Conv1d(1, 1, kernel_size=k_size, padding=(k_size - 1) // 2, bias=False)
+        self.gate = nn.Sigmoid()
+
+    def forward(self, x):
+        """Apply efficient channel attention."""
+        y = self.pool(x).squeeze(-1).transpose(-1, -2)
+        y = self.conv(y)
+        y = self.gate(y).transpose(-1, -2).unsqueeze(-1)
+        return x * y
 
 
 class Concat(nn.Module):

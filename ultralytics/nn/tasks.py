@@ -18,6 +18,7 @@ from ultralytics.nn.modules import (
     C2PSA,
     C3,
     C3TR,
+    CBAM,
     ELAN1,
     OBB,
     OBB26,
@@ -47,6 +48,7 @@ from ultralytics.nn.modules import (
     Detect,
     DWConv,
     DWConvTranspose2d,
+    ECAAttention,
     Focus,
     GhostBottleneck,
     GhostConv,
@@ -62,6 +64,7 @@ from ultralytics.nn.modules import (
     RepNCSPELAN4,
     RepVGGDW,
     ResNetLayer,
+    SEAttention,
     RTDETRDecoder,
     SCDown,
     Segment,
@@ -708,7 +711,7 @@ class ClassificationModel(BaseModel):
 
     def init_criterion(self):
         """Initialize the loss criterion for the ClassificationModel."""
-        return v8ClassificationLoss()
+        return v8ClassificationLoss(self)
 
 
 class RTDETRDetectionModel(DetectionModel):
@@ -1666,6 +1669,19 @@ def parse_model(d, ch, verbose=True):
                 legacy = False
         elif m is AIFI:
             args = [ch[f], *args]
+
+        elif m is CBAM:
+            c2 = ch[f]
+            args = [ch[f], *args]
+
+        elif m is SEAttention:
+            c2 = ch[f]
+            args = [ch[f], *args]
+
+        elif m is ECAAttention:
+            c2 = ch[f]
+            args = [ch[f], *args]
+
         elif m in frozenset({HGStem, HGBlock}):
             c1, cm, c2 = ch[f], args[0], args[1]
             args = [c1, cm, c2, *args[2:]]
