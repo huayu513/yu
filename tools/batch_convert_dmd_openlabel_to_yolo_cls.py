@@ -6,9 +6,7 @@ from convert_dmd_openlabel_to_yolo_cls import export_dataset_from_json
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Batch convert a DMD dataset folder to a YOLO classification dataset."
-    )
+    parser = argparse.ArgumentParser(description="Batch convert a DMD dataset folder to a YOLO classification dataset.")
     parser.add_argument(
         "--dataset-root",
         required=True,
