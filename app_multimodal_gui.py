@@ -4,9 +4,9 @@ import csv
 import queue
 import threading
 import time
+import tkinter as tk
 from collections import deque
 from pathlib import Path
-import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 from tkinter.scrolledtext import ScrolledText
 
@@ -98,19 +98,29 @@ class MultiModalGUI(tk.Tk):
             params.columnconfigure(col, weight=1)
 
         ttk.Label(params, text="Sample Interval").grid(row=0, column=0, sticky="w")
-        ttk.Entry(params, textvariable=self.sample_interval_var, width=8).grid(row=0, column=1, sticky="ew", padx=(0, 8))
+        ttk.Entry(params, textvariable=self.sample_interval_var, width=8).grid(
+            row=0, column=1, sticky="ew", padx=(0, 8)
+        )
         ttk.Label(params, text="Window Size").grid(row=0, column=2, sticky="w")
         ttk.Entry(params, textvariable=self.window_size_var, width=8).grid(row=0, column=3, sticky="ew")
 
         ttk.Label(params, text="Body Shift").grid(row=1, column=0, sticky="w", pady=(8, 0))
-        ttk.Entry(params, textvariable=self.body_shift_var, width=8).grid(row=1, column=1, sticky="ew", padx=(0, 8), pady=(8, 0))
+        ttk.Entry(params, textvariable=self.body_shift_var, width=8).grid(
+            row=1, column=1, sticky="ew", padx=(0, 8), pady=(8, 0)
+        )
         ttk.Label(params, text="Face Shift").grid(row=1, column=2, sticky="w", pady=(8, 0))
         ttk.Entry(params, textvariable=self.face_shift_var, width=8).grid(row=1, column=3, sticky="ew", pady=(8, 0))
 
         ttk.Label(params, text="Max Frames (0=all)").grid(row=2, column=0, sticky="w", pady=(8, 0))
-        ttk.Entry(params, textvariable=self.max_frames_var, width=8).grid(row=2, column=1, sticky="ew", padx=(0, 8), pady=(8, 0))
-        ttk.Checkbutton(params, text="Save Video", variable=self.save_video_var).grid(row=2, column=2, sticky="w", pady=(8, 0))
-        ttk.Checkbutton(params, text="Save CSV", variable=self.save_csv_var).grid(row=2, column=3, sticky="w", pady=(8, 0))
+        ttk.Entry(params, textvariable=self.max_frames_var, width=8).grid(
+            row=2, column=1, sticky="ew", padx=(0, 8), pady=(8, 0)
+        )
+        ttk.Checkbutton(params, text="Save Video", variable=self.save_video_var).grid(
+            row=2, column=2, sticky="w", pady=(8, 0)
+        )
+        ttk.Checkbutton(params, text="Save CSV", variable=self.save_csv_var).grid(
+            row=2, column=3, sticky="w", pady=(8, 0)
+        )
 
         row += 1
 
@@ -124,7 +134,9 @@ class MultiModalGUI(tk.Tk):
         self.start_button.grid(row=0, column=0, sticky="ew", padx=(0, 6))
         self.stop_button = ttk.Button(buttons, text="Stop", command=self.stop_inference, state="disabled")
         self.stop_button.grid(row=0, column=1, sticky="ew", padx=6)
-        ttk.Button(buttons, text="Open Output Dir", command=self._open_output_dir_hint).grid(row=0, column=2, sticky="ew", padx=(6, 0))
+        ttk.Button(buttons, text="Open Output Dir", command=self._open_output_dir_hint).grid(
+            row=0, column=2, sticky="ew", padx=(6, 0)
+        )
 
         row += 1
 
@@ -378,8 +390,8 @@ class MultiModalGUI(tk.Tk):
                     distraction_window.append(preds["distraction_probs"])
                     fatigue_window.append(preds["fatigue_probs"])
 
-                    current_distraction_pred, current_distraction_conf, current_distraction_probs = get_smoothed_prediction(
-                        distraction_window, inferencer.distraction_classes
+                    current_distraction_pred, current_distraction_conf, current_distraction_probs = (
+                        get_smoothed_prediction(distraction_window, inferencer.distraction_classes)
                     )
                     current_fatigue_pred, current_fatigue_conf, current_fatigue_probs = get_smoothed_prediction(
                         fatigue_window, inferencer.fatigue_classes

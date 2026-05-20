@@ -7,9 +7,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 import cv2
-
 from convert_dmd_openlabel_to_yolo_cls import STREAM_ALIAS, load_openlabel, resolve_video_path
-
 
 STATEFARM_MAPPING = {
     "c0": "safe_drive",
@@ -184,8 +182,8 @@ def load_s1_rows(metadata_csv: Path):
 
 def split_rows(rows, train_ratio, val_ratio):
     n = len(rows)
-    train_end = max(1, int(math.floor(n * train_ratio)))
-    val_count = max(1, int(math.floor(n * val_ratio)))
+    train_end = max(1, math.floor(n * train_ratio))
+    val_count = max(1, math.floor(n * val_ratio))
     val_end = min(n - 1, train_end + val_count) if n >= 3 else min(n, train_end + val_count)
 
     if n == 1:
@@ -282,6 +280,7 @@ def collect_non_cellphone_frames(openlabel, stream_key: str, margin: int):
 
     safe_frames = [frame_idx for frame_idx in range(max_frame + 1) if frame_idx not in blocked]
     return safe_frames, frame_shift
+
 
 def export_s2_phone_samples(
     json_path: Path,
@@ -439,7 +438,9 @@ def main():
         description="Build a 5-class distraction dataset with phone_use from State Farm + DMD S1/S2."
     )
     parser.add_argument("--statefarm-dir", type=Path, default=Path("dataset_cls_subject"))
-    parser.add_argument("--s1-metadata-csv", type=Path, default=Path("runs/dmd_samples/driver_actions_body_100/samples_metadata.csv"))
+    parser.add_argument(
+        "--s1-metadata-csv", type=Path, default=Path("runs/dmd_samples/driver_actions_body_100/samples_metadata.csv")
+    )
     parser.add_argument(
         "--s2-json",
         type=Path,

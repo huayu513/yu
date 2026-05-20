@@ -3,10 +3,10 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import sys
 from collections import Counter
 from copy import deepcopy
 from pathlib import Path
-import sys
 
 import torch
 import yaml
@@ -25,7 +25,7 @@ from train_multimodal_v1 import (
 
 
 def load_yaml(path: str | Path) -> dict:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -72,8 +72,8 @@ def main() -> None:
     metadata = json.loads((source_root / "metadata.json").read_text(encoding="utf-8"))
     distraction_classes = metadata["distraction_classes"]
     fatigue_classes = metadata["fatigue_classes"]
-    distraction_to_idx = {name: i for i, name in enumerate(distraction_classes)}
-    fatigue_to_idx = {name: i for i, name in enumerate(fatigue_classes)}
+    {name: i for i, name in enumerate(distraction_classes)}
+    {name: i for i, name in enumerate(fatigue_classes)}
 
     train_dataset = MultiModalDriverDataset(
         csv_path=source_root / "train.csv",
@@ -188,8 +188,8 @@ def main() -> None:
 
     new_train_rows = source_rows + hard_duplicate_rows
 
-    val_rows = list(csv.DictReader(open(source_root / "val.csv", "r", encoding="utf-8")))
-    test_rows = list(csv.DictReader(open(source_root / "test.csv", "r", encoding="utf-8")))
+    val_rows = list(csv.DictReader(open(source_root / "val.csv", encoding="utf-8")))
+    test_rows = list(csv.DictReader(open(source_root / "test.csv", encoding="utf-8")))
 
     write_csv(output_root / "train.csv", new_train_rows)
     write_csv(output_root / "val.csv", val_rows)
