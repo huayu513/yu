@@ -1,7 +1,8 @@
-import cv2
+from collections import deque
+
 import cv2
 import numpy as np
-from collections import deque
+
 from ultralytics import YOLO
 
 # 1. 加载模型
@@ -31,7 +32,7 @@ video_path = "1.mp4"
 cap = cv2.VideoCapture(video_path)
 
 frame_id = 0
-sample_interval = 3   # 每3帧取1帧
+sample_interval = 3  # 每3帧取1帧
 alert_count = 0
 
 while True:
@@ -45,7 +46,7 @@ while True:
 
     # 5. 单帧分类
     results = model(frame, verbose=False)
-    probs = results[0].probs.data.cpu().numpy()   # 10类概率
+    probs = results[0].probs.data.cpu().numpy()  # 10类概率
 
     prob_window.append(probs)
 
