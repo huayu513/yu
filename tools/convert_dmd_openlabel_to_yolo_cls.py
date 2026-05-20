@@ -6,7 +6,6 @@ from pathlib import Path
 
 import cv2
 
-
 STREAM_ALIAS = {
     "face": "face_camera",
     "body": "body_camera",
@@ -15,9 +14,7 @@ STREAM_ALIAS = {
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Convert DMD OpenLABEL annotations to a YOLO classification dataset."
-    )
+    parser = argparse.ArgumentParser(description="Convert DMD OpenLABEL annotations to a YOLO classification dataset.")
     parser.add_argument("--json", required=True, help="Path to *_ann_distraction.json.")
     parser.add_argument(
         "--output-dir",
@@ -75,7 +72,7 @@ def load_openlabel(json_path: Path):
 
 
 def choose_split(stem: str, frame_idx: int, val_ratio: float, test_ratio: float):
-    key = f"{stem}_{frame_idx}".encode("utf-8")
+    key = f"{stem}_{frame_idx}".encode()
     score = int(hashlib.md5(key).hexdigest(), 16) % 10000 / 10000.0
     if score < test_ratio:
         return "test"

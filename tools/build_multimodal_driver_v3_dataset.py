@@ -4,11 +4,9 @@ import json
 from pathlib import Path
 
 import cv2
-
-from convert_dmd_openlabel_to_yolo_cls import load_openlabel, collect_frame_labels
 from build_statefarm_dmd_phone5_dataset import collect_cellphone_frames
+from convert_dmd_openlabel_to_yolo_cls import collect_frame_labels, load_openlabel
 from convert_dmd_s5_to_fatigue_face_cls import build_samples, split_rows
-
 
 DISTRACTION_LABELS = ("safe_drive", "phone_use", "radio", "drinking", "talking_to_passenger")
 S1_LABELS = ("safe_drive", "radio", "drinking", "talking_to_passenger")
@@ -22,17 +20,23 @@ def parse_args():
     parser.add_argument(
         "--s1-json",
         type=Path,
-        default=Path("dmd-dataset-mini-sample-gA-3-s1/dmd/gA/3/s1/gA_3_s1_2019-03-08T10;27;38+01;00_rgb_ann_distraction.json"),
+        default=Path(
+            "dmd-dataset-mini-sample-gA-3-s1/dmd/gA/3/s1/gA_3_s1_2019-03-08T10;27;38+01;00_rgb_ann_distraction.json"
+        ),
     )
     parser.add_argument(
         "--s2-json",
         type=Path,
-        default=Path("dmd-dataset-mini-sample-gB-10-s2/dmd/gB/10/s2/gB_10_s2_2019-03-11T15;15;21+01;00_rgb_ann_distraction.json"),
+        default=Path(
+            "dmd-dataset-mini-sample-gB-10-s2/dmd/gB/10/s2/gB_10_s2_2019-03-11T15;15;21+01;00_rgb_ann_distraction.json"
+        ),
     )
     parser.add_argument(
         "--s5-json",
         type=Path,
-        default=Path("dmd-dataset-mini-sample-gB-10-s5/dmd/gB/10/s5/gB_10_s5_2019-03-12T10;35;20+01;00_rgb_ann_drowsiness.json"),
+        default=Path(
+            "dmd-dataset-mini-sample-gB-10-s5/dmd/gB/10/s5/gB_10_s5_2019-03-12T10;35;20+01;00_rgb_ann_drowsiness.json"
+        ),
     )
     parser.add_argument("--output-dir", type=Path, default=Path("dataset_multimodal_driver_v3"))
     parser.add_argument("--s1-per-class", type=int, default=200)
