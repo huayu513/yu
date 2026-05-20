@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import argparse
 import csv
 import json
@@ -5,7 +7,6 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 from ultralytics import YOLO
-
 
 DISTRACTION_4_PRESET = {
     "0": "safe_drive",
@@ -137,7 +138,7 @@ def load_sample_rows(samples_dir: Path):
 
 def load_mapping(args) -> dict:
     if args.map_file:
-        with open(args.map_file, "r", encoding="utf-8") as f:
+        with open(args.map_file, encoding="utf-8") as f:
             raw = json.load(f)
         mapping = {}
         for key, value in raw.items():
