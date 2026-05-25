@@ -5,7 +5,6 @@ from pathlib import Path
 
 import cv2
 
-
 LABEL_CANDIDATES = [
     "label",
     "class",
@@ -32,9 +31,7 @@ BOX_CANDIDATES = ["bbox", "box", "rect"]
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-        description="Convert video + JSON annotations to a YOLO classification dataset."
-    )
+    parser = argparse.ArgumentParser(description="Convert video + JSON annotations to a YOLO classification dataset.")
     parser.add_argument("--json", required=True, help="Annotation JSON path.")
     parser.add_argument(
         "--videos-dir",
@@ -158,8 +155,7 @@ def frame_range_from_item(item, fps: float):
         return int(float(start_time) * fps), int(float(end_time) * fps)
 
     raise ValueError(
-        "Annotation is missing frame info. Need frame/frame_idx or "
-        "start_frame+end_frame or start_time+end_time."
+        "Annotation is missing frame info. Need frame/frame_idx or start_frame+end_frame or start_time+end_time."
     )
 
 
@@ -237,10 +233,7 @@ def main():
         try:
             split, label, video_name, written = export_annotation(item, args, counters)
             summary[(split, label)] += written
-            print(
-                f"[{idx}/{len(annotations)}] {video_name} -> {split}/{label}, "
-                f"exported {written} images"
-            )
+            print(f"[{idx}/{len(annotations)}] {video_name} -> {split}/{label}, exported {written} images")
         except Exception as exc:
             print(f"[{idx}/{len(annotations)}] skipped: {exc}")
 

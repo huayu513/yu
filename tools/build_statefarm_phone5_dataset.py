@@ -5,7 +5,6 @@ import shutil
 from collections import Counter, defaultdict
 from pathlib import Path
 
-
 STATEFARM_MAPPING = {
     "c0": "safe_drive",
     "c1": "phone_use",

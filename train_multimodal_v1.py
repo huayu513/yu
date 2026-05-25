@@ -33,7 +33,7 @@ def seed_everything(seed: int) -> None:
 def load_yaml(path: str | Path) -> dict:
     # 所有训练超参数都放在 yaml 里，脚本本身只负责“读取并执行”。
     # 这样后面换路径、batch、学习率时，不需要改 Python 代码。
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -87,7 +87,7 @@ class MultiModalDriverDataset(Dataset):
     @staticmethod
     def _read_rows(csv_path: Path) -> list[dict[str, str]]:
         # CSV 里每一行就是一条多模态样本的元信息。
-        with open(csv_path, "r", encoding="utf-8") as f:
+        with open(csv_path, encoding="utf-8") as f:
             return list(csv.DictReader(f))
 
     @staticmethod
@@ -167,8 +167,7 @@ class UltralyticsClassificationEncoder(nn.Module):
     - body 分支，不从零训练，而是复用你已经训练好的分心模型
     - face 分支，不从零训练，而是复用你已经训练好的疲劳模型
 
-    这里不会直接复用原来的最终分类头，而是把分类模型改造成“编码器”：
-    输入图片 -> 输出一个特征向量
+    这里不会直接复用原来的最终分类头，而是把分类模型改造成“编码器”： 输入图片 -> 输出一个特征向量
     """
 
     def __init__(self, weight_path: str | Path) -> None:
@@ -219,7 +218,7 @@ def load_ultralytics_classifier_linear(weight_path: str | Path) -> nn.Linear:
 
 
 class MultiModalDriverNet(nn.Module):
-    """body + face 双分支，多任务输出的第一版多模态模型。
+    """body + face 双分支，多任务输出的第一版多模态模型。.
 
     结构非常朴素，目的是先跑通并让你容易读懂：
     1. body_encoder 提取 body 特征
@@ -227,8 +226,8 @@ class MultiModalDriverNet(nn.Module):
     3. 各自先过一层 projection，统一到相同维度
     4. 拼接后再经过 fusion MLP
     5. 输出两个任务头：
-       - distraction_head
-       - fatigue_head
+    - distraction_head
+    - fatigue_head
     """
 
     def __init__(
@@ -762,7 +761,9 @@ def masked_cross_entropy(logits: torch.Tensor, labels: torch.Tensor) -> tuple[to
     return F.cross_entropy(logits[mask], labels[mask]), int(mask.sum().item())
 
 
-def masked_focal_loss(logits: torch.Tensor, labels: torch.Tensor, gamma: float = 2.0) -> tuple[torch.Tensor | None, int]:
+def masked_focal_loss(
+    logits: torch.Tensor, labels: torch.Tensor, gamma: float = 2.0
+) -> tuple[torch.Tensor | None, int]:
     mask = labels >= 0
     if not mask.any():
         return None, 0
@@ -829,13 +830,15 @@ def run_epoch(
                 outputs["distraction_logits"], distraction_label, gamma=distraction_focal_gamma
             )
         else:
-            distraction_loss, distraction_count = masked_cross_entropy(outputs["distraction_logits"], distraction_label)
+            distraction_loss, _distraction_count = masked_cross_entropy(
+                outputs["distraction_logits"], distraction_label
+            )
         if fatigue_focal_gamma > 0:
             fatigue_loss, fatigue_count = masked_focal_loss(
                 outputs["fatigue_logits"], fatigue_label, gamma=fatigue_focal_gamma
             )
         else:
-            fatigue_loss, fatigue_count = masked_cross_entropy(outputs["fatigue_logits"], fatigue_label)
+            fatigue_loss, _fatigue_count = masked_cross_entropy(outputs["fatigue_logits"], fatigue_label)
         body_aux_loss, _ = masked_cross_entropy(outputs["body_distraction_logits"], distraction_label)
         face_aux_loss, _ = masked_cross_entropy(outputs["face_fatigue_logits"], fatigue_label)
 
@@ -875,9 +878,7 @@ def run_epoch(
         fatigue_total += ft
 
         # tqdm 上显示的是当前 batch 的局部情况，不是整轮的最终结果。
-        progress.set_description(
-            f"loss={loss.item():.4f} d_acc={dc}/{max(dt,1)} f_acc={fc}/{max(ft,1)}"
-        )
+        progress.set_description(f"loss={loss.item():.4f} d_acc={dc}/{max(dt, 1)} f_acc={fc}/{max(ft, 1)}")
 
     # 返回整轮统计。
     return {
