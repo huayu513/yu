@@ -4,7 +4,6 @@ from collections import defaultdict
 from pathlib import Path
 
 import cv2
-
 from convert_dmd_openlabel_to_yolo_cls import (
     STREAM_ALIAS,
     collect_frame_labels,
