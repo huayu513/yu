@@ -6,7 +6,6 @@ import shutil
 from collections import Counter, defaultdict
 from pathlib import Path
 
-
 CLASS_MAP = {
     "drowsy": "fatigue",
     "notdrowsy": "non_fatigue",
