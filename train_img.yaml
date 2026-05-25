@@ -17,6 +17,4 @@ hsv_s: 0.8
 hsv_v: 0.5
 scale: 0.6
 patience: 30
-
-
 # yolo classify train cfg=train_img.yaml

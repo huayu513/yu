@@ -22,5 +22,4 @@ hsv_h: 0.0
 hsv_s: 0.2
 hsv_v: 0.2
 scale: 0.2
-
 # yolo classify train cfg=train_mix2.yaml
