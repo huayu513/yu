@@ -21,7 +21,9 @@ from train_multimodal_v1 import MultiModalDriverNet, build_transforms, load_yaml
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run multimodal body+face inference on paired videos.")
-    parser.add_argument("--config", default="train_multimodal_v14.yaml", help="Training config used to build the model.")
+    parser.add_argument(
+        "--config", default="train_multimodal_v14.yaml", help="Training config used to build the model."
+    )
     parser.add_argument("--checkpoint", required=True, help="Path to multimodal best.pt/last.pt checkpoint.")
     parser.add_argument("--body-video", required=True, help="Path to body camera video.")
     parser.add_argument("--face-video", required=True, help="Path to face camera video.")
@@ -137,14 +139,24 @@ def get_smoothed_prediction(prob_window: deque[np.ndarray], class_names: list[st
     return class_names[pred_idx], float(avg_probs[pred_idx]), avg_probs
 
 
-def draw_prob_lines(canvas: np.ndarray, x: int, y: int, title: str, class_names: list[str], probs: np.ndarray, color: tuple[int, int, int]) -> int:
+def draw_prob_lines(
+    canvas: np.ndarray,
+    x: int,
+    y: int,
+    title: str,
+    class_names: list[str],
+    probs: np.ndarray,
+    color: tuple[int, int, int],
+) -> int:
     cv2.putText(canvas, title, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.65, color, 2, cv2.LINE_AA)
     y += 28
     top_indices = np.argsort(probs)[::-1][:2]
     for idx in top_indices:
         name = class_names[idx]
         prob = float(probs[idx])
-        cv2.putText(canvas, f"{name}: {prob:.3f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (245, 245, 245), 1, cv2.LINE_AA)
+        cv2.putText(
+            canvas, f"{name}: {prob:.3f}", (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (245, 245, 245), 1, cv2.LINE_AA
+        )
         y += 24
     return y
 
@@ -185,7 +197,16 @@ def render_side_by_side(
         cv2.LINE_AA,
     )
 
-    cv2.putText(canvas, f"Body frame: {body_frame_idx}", (20, content_h + 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 220, 255), 2, cv2.LINE_AA)
+    cv2.putText(
+        canvas,
+        f"Body frame: {body_frame_idx}",
+        (20, content_h + 30),
+        cv2.FONT_HERSHEY_SIMPLEX,
+        0.6,
+        (0, 220, 255),
+        2,
+        cv2.LINE_AA,
+    )
     cv2.putText(
         canvas,
         f"Face frame: {face_frame_idx}",
