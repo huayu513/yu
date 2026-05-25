@@ -7,5 +7,4 @@ workers: 4
 seed: 42
 device: 0
 pretrained: yolo11n-cls.pt
-
 # yolo classify train cfg=train_cbam.yaml
