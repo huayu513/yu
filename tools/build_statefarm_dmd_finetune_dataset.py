@@ -6,7 +6,6 @@ import shutil
 from collections import Counter, defaultdict
 from pathlib import Path
 
-
 DEFAULT_MAPPING = {
     "safe_drive": "c0",
     "radio": "c5",
@@ -95,8 +94,8 @@ def load_dmd_rows(metadata_csv, mapping):
 
 def split_rows(rows, train_ratio, val_ratio):
     n = len(rows)
-    train_end = max(1, int(math.floor(n * train_ratio)))
-    val_count = max(1, int(math.floor(n * val_ratio)))
+    train_end = max(1, math.floor(n * train_ratio))
+    val_count = max(1, math.floor(n * val_ratio))
     val_end = min(n - 1, train_end + val_count) if n >= 3 else min(n, train_end + val_count)
 
     if n == 1:

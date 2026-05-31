@@ -108,9 +108,7 @@ def build_samples(openlabel: dict, close_threshold: int, fatigue_every_n: int, n
 
         if action_type == "eyes_state/open":
             for interval in intervals:
-                nonfatigue_rows.extend(
-                    sample_interval(interval, nonfatigue_every_n, "non_fatigue", action_type)
-                )
+                nonfatigue_rows.extend(sample_interval(interval, nonfatigue_every_n, "non_fatigue", action_type))
         elif action_type == "eyes_state/close":
             for interval in intervals:
                 length = int(interval["frame_end"]) - int(interval["frame_start"]) + 1
@@ -148,7 +146,9 @@ def split_rows(rows, train_ratio: float, val_ratio: float):
     return {"train": train_rows, "val": val_rows, "test": test_rows}
 
 
-def export_dataset(face_video: Path, split_rows_by_label: dict, output_dir: Path, jpg_quality: int, metadata_extra: dict):
+def export_dataset(
+    face_video: Path, split_rows_by_label: dict, output_dir: Path, jpg_quality: int, metadata_extra: dict
+):
     all_rows = []
     frame_requests = {}
 
@@ -228,9 +228,7 @@ def main():
     face_video = resolve_face_video(args.json, openlabel)
     samples = build_samples(openlabel, args.close_threshold, args.fatigue_every_n, args.nonfatigue_every_n)
 
-    split_rows_by_label = {
-        label: split_rows(rows, args.train_ratio, args.val_ratio) for label, rows in samples.items()
-    }
+    split_rows_by_label = {label: split_rows(rows, args.train_ratio, args.val_ratio) for label, rows in samples.items()}
 
     metadata_path, all_rows = export_dataset(
         face_video=face_video,

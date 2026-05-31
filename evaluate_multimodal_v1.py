@@ -115,7 +115,11 @@ def main() -> None:
         device = torch.device(f"cuda:{cfg['device']}")
     model = model.to(device).eval()
 
-    output_dir = Path(args.output_dir) if args.output_dir else Path(args.checkpoint).resolve().parent.parent / f"eval_{args.split}"
+    output_dir = (
+        Path(args.output_dir)
+        if args.output_dir
+        else Path(args.checkpoint).resolve().parent.parent / f"eval_{args.split}"
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     distraction_rows: list[dict] = []
@@ -138,14 +142,18 @@ def main() -> None:
 
             outputs = model(body, face, face_prev=face_prev, face_next=face_next)
 
-            d_rows, d_summary = evaluate_task(outputs["distraction_logits"].cpu(), distraction_label.cpu(), distraction_classes)
+            d_rows, d_summary = evaluate_task(
+                outputs["distraction_logits"].cpu(), distraction_label.cpu(), distraction_classes
+            )
             f_rows, f_summary = evaluate_task(outputs["fatigue_logits"].cpu(), fatigue_label.cpu(), fatigue_classes)
             distraction_rows.extend(d_rows)
             fatigue_rows.extend(f_rows)
             for true_label, preds in d_summary.items():
                 distraction_summary.setdefault(true_label, {})
                 for pred_label, count in preds.items():
-                    distraction_summary[true_label][pred_label] = distraction_summary[true_label].get(pred_label, 0) + count
+                    distraction_summary[true_label][pred_label] = (
+                        distraction_summary[true_label].get(pred_label, 0) + count
+                    )
             for true_label, preds in f_summary.items():
                 fatigue_summary.setdefault(true_label, {})
                 for pred_label, count in preds.items():
