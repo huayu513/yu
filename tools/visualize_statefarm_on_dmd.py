@@ -5,8 +5,8 @@ from pathlib import Path
 
 import cv2
 import numpy as np
-from ultralytics import YOLO
 
+from ultralytics import YOLO
 
 # 复用你现有 run.py 的启发式风险权重：
 # 模型输出每个 c0-c9 的概率后，用“概率 * 风险权重”求期望风险。
@@ -55,9 +55,7 @@ DMD_MATCH_RULES = {
 
 def parse_args():
     # 这个脚本是命令行工具：输入模型、视频和可选标注，输出可视化视频。
-    parser = argparse.ArgumentParser(
-        description="Visualize a State Farm classifier running on DMD video."
-    )
+    parser = argparse.ArgumentParser(description="Visualize a State Farm classifier running on DMD video.")
     parser.add_argument("--model", required=True, help="Path to State Farm classifier weights.")
     parser.add_argument("--video", required=True, help="Path to DMD video.")
     parser.add_argument("--output", required=True, help="Path to output visualization video.")
@@ -361,4 +359,3 @@ if __name__ == "__main__":
 #   --label-prefix driver_actions `
 #   --output "runs\viz\statefarm_on_dmd_body.mp4" `
 #   --show
-
