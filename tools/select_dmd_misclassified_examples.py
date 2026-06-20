@@ -8,7 +8,6 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-
 EXPECTED_MAP = {
     "safe_drive": {"c0"},
     "radio": {"c5"},
@@ -215,10 +214,7 @@ def main():
     print(f"summary: {summary_path}")
     print("\nSelected confusion pairs")
     for row in summary_rows:
-        print(
-            f"{row['true_label']} -> {row['pred_class']}: "
-            f"count={row['count_in_csv']}, exported={row['exported']}"
-        )
+        print(f"{row['true_label']} -> {row['pred_class']}: count={row['count_in_csv']}, exported={row['exported']}")
 
 
 if __name__ == "__main__":

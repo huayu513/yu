@@ -8,7 +8,6 @@ from pathlib import Path
 
 import cv2
 
-
 DISTRACTION_LABELS = ("safe_drive", "radio", "drinking", "talking_to_passenger")
 FATIGUE_LABELS = ("non_fatigue", "fatigue")
 

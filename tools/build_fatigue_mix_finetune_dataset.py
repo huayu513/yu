@@ -5,7 +5,6 @@ import shutil
 from collections import Counter, defaultdict
 from pathlib import Path
 
-
 CLASSES = ("fatigue", "non_fatigue")
 
 
@@ -261,7 +260,9 @@ def main():
         added_stats["s5_train"] = stats
         all_rows.extend(rows)
     else:
-        stats, rows = add_split(args.s5_dir, args.output_dir, "train", "s5", args.link_mode, repeat=args.s5_train_repeat)
+        stats, rows = add_split(
+            args.s5_dir, args.output_dir, "train", "s5", args.link_mode, repeat=args.s5_train_repeat
+        )
         added_stats["s5_train"] = stats
         all_rows.extend(rows)
 
