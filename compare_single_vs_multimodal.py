@@ -12,7 +12,6 @@ from train_multimodal_v1 import MultiModalDriverNet, build_transforms, load_yaml
 from ultralytics.data.augment import classify_transforms
 from ultralytics.nn.tasks import load_checkpoint
 
-
 DISTRACTION_SINGLE_MAP = {
     "0": "safe_drive",
     "5": "radio",
@@ -30,7 +29,7 @@ DISTRACTION_SINGLE_MAP = {
 
 
 def read_rows(csv_path: Path) -> list[dict[str, str]]:
-    with open(csv_path, "r", encoding="utf-8") as f:
+    with open(csv_path, encoding="utf-8") as f:
         return list(csv.DictReader(f))
 
 
@@ -48,7 +47,15 @@ def predict_single(model, image_path: str, transform, device: torch.device) -> t
     return str(pred_name), conf
 
 
-def predict_multimodal(model, body_path: str, face_path: str, transform, device: torch.device, distraction_classes: list[str], fatigue_classes: list[str]) -> dict[str, tuple[str, float]]:
+def predict_multimodal(
+    model,
+    body_path: str,
+    face_path: str,
+    transform,
+    device: torch.device,
+    distraction_classes: list[str],
+    fatigue_classes: list[str],
+) -> dict[str, tuple[str, float]]:
     body = transform(Image.open(body_path).convert("RGB")).unsqueeze(0).to(device)
     face = transform(Image.open(face_path).convert("RGB")).unsqueeze(0).to(device)
     with torch.no_grad():
@@ -133,7 +140,11 @@ def main() -> None:
     mm_model = mm_model.to(device).eval()
     mm_transform = build_transforms(cfg, "val")
 
-    output_dir = Path(args.output_dir) if args.output_dir else Path(args.multimodal_checkpoint).resolve().parent.parent / f"compare_{args.split}"
+    output_dir = (
+        Path(args.output_dir)
+        if args.output_dir
+        else Path(args.multimodal_checkpoint).resolve().parent.parent / f"compare_{args.split}"
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     distraction_single_summary: dict[str, dict[str, int]] = {}
@@ -208,7 +219,9 @@ def main() -> None:
         "distraction_count": sum(sum(v.values()) for v in distraction_single_summary.values()),
         "fatigue_count": sum(sum(v.values()) for v in fatigue_single_summary.values()),
     }
-    (output_dir / "comparison_metrics.json").write_text(json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8")
+    (output_dir / "comparison_metrics.json").write_text(
+        json.dumps(metrics, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
 
     print(json.dumps(metrics, ensure_ascii=False, indent=2))
     print(f"Results saved to {output_dir}")
