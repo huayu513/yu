@@ -6,7 +6,6 @@ from pathlib import Path
 
 import cv2
 
-
 DISTRACTION_LABELS = ("safe_drive", "phone_use", "radio", "drinking", "talking_to_passenger")
 FATIGUE_LABELS = ("non_fatigue", "fatigue")
 S1_KEEP = {"safe_drive", "radio", "drinking", "talking_to_passenger"}
@@ -264,7 +263,9 @@ def main():
         )
 
     # Re-split distraction rows per class to keep the five classes balanced.
-    distraction_split_rows = split_rows_per_class(distraction_pool, "distraction_label", args.val_ratio, args.test_ratio)
+    distraction_split_rows = split_rows_per_class(
+        distraction_pool, "distraction_label", args.val_ratio, args.test_ratio
+    )
     for split in ("train", "val", "test"):
         for row in distraction_split_rows[split]:
             row["split"] = split
